@@ -13,10 +13,12 @@ const schema = z.object({
 });
 
 const apiurl = "https://url-shortener-7jk6.onrender.com";
+// const apiurl = "http://localhost:3333";
 
 function App() {
   const [shortUrl, setShortUrl] = useState<string | null>(null);
   const [hits, setHits] = useState<number>(0);
+  const [qrcode, setQrcode] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     if (!shortUrl) return;
@@ -55,6 +57,7 @@ function App() {
       const result = await response.json();
 
       setShortUrl(result.shortUrl);
+      setQrcode(result.qr);
       await new Promise((resolve) => setTimeout(resolve, 2000));
       console.log(result);
     } catch (error) {
@@ -98,25 +101,30 @@ function App() {
         <p className="text-red-600">{errors.url?.message}</p>
 
         {/* Exibe URL final */}
-        {shortUrl && (
-          <div className="flex flex-col gap-4 text-center">
-            <h2 className="font-semibold text-xl">Encurtado</h2>
-            {loading && <span className="text-green-700">Carregando...</span>}
-            <a
-              href={shortUrl}
-              target="_blank"
-              className="text-green-600 underline break-all"
-            >
-              {shortUrl}
-            </a>
+
+        <div className="flex flex-col gap-4 text-center">
+          {loading && <span className="text-green-700">Carregando...</span>}
+          {shortUrl && !loading && (
             <div>
-              {" "}
-              {hits > 0 && (
-                <span className="text- text-black">{hits} acessos</span>
-              )}
+              <a
+                href={shortUrl}
+                target="_blank"
+                className="text-green-600 underline break-all"
+              >
+                {shortUrl}
+              </a>
+              <div>
+                {" "}
+                {hits > 0 && (
+                  <span className="text- text-black">{hits} acessos</span>
+                )}
+              </div>
+              <div>
+                {qrcode && <img src={qrcode} alt="qrcode" className="w-full" />}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
