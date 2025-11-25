@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,9 +15,10 @@ const schema = z.object({
 const apiurl = "https://url-shortener-7jk6.onrender.com";
 
 function App() {
-  const [shortUrl, setShortUrl] = React.useState("");
-  const [hits, setHits] = React.useState(0);
-  React.useEffect(() => {
+  const [shortUrl, setShortUrl] = useState<string | null>(null);
+  const [hits, setHits] = useState<number>(0);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
     if (!shortUrl) return;
 
     const id = shortUrl.split("/").pop();
@@ -38,22 +39,29 @@ function App() {
   });
 
   async function onSubmit(data: FormData) {
-    const response = await fetch(
-      `${apiurl}/encurtar`, // Replace with your API endpoint URL
-      {
-        method: "POST",
-        body: JSON.stringify({ url: data.url }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `${apiurl}/encurtar`, // Replace with your API endpoint URL
+        {
+          method: "POST",
+          body: JSON.stringify({ url: data.url }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    const result = await response.json();
+      const result = await response.json();
 
-    setShortUrl(result.shortUrl);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log(result);
+      setShortUrl(result.shortUrl);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function loadStats(id: string) {
@@ -93,6 +101,7 @@ function App() {
         {shortUrl && (
           <div className="flex flex-col gap-4 text-center">
             <h2 className="font-semibold text-xl">Encurtado</h2>
+            {loading && <span className="text-green-700">Carregando...</span>}
             <a
               href={shortUrl}
               target="_blank"
