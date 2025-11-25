@@ -18,8 +18,17 @@ function App() {
   const [shortUrl, setShortUrl] = React.useState("");
   const [hits, setHits] = React.useState(0);
   React.useEffect(() => {
-    console.log("hits atualizado:", hits);
-  }, [hits]);
+    if (!shortUrl) return;
+
+    const id = shortUrl.split("/").pop();
+
+    const interval = setInterval(() => {
+      loadStats(id!);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [shortUrl]);
+
   const {
     register,
     handleSubmit,
@@ -45,7 +54,6 @@ function App() {
     setShortUrl(result.shortUrl);
     await new Promise((resolve) => setTimeout(resolve, 2000));
     console.log(result);
-    loadStats(result.shortUrl.split("/").pop());
   }
 
   async function loadStats(id: string) {
