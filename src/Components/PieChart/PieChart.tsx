@@ -54,7 +54,7 @@ export default function MyPieChart({ devices }: any) {
 
       {/* Legend */}
       <div className="mt-4 flex flex-wrap gap-3">
-        {data.map((item) => (
+        {data.map((item: any) => (
           <div key={item.name} className="flex items-center gap-2">
             <div
               className="w-3 h-3 rounded-sm"
