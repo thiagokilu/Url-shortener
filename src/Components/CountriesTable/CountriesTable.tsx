@@ -33,13 +33,23 @@ export default function CountriesTable({ countries, hits }: any) {
           </thead>
 
           <tbody className="bg-white divide-y divide-gray-200">
-            {data.map((item, index) => {
-              const porcentagem =
-                hits > 0 ? ((item.total / hits) * 100).toFixed(1) : 0;
+            {data.map((item: any, index: number) => {
+              // ... dentro do data.map:
+              const porcentagemDecimal =
+                hits > 0 ? (item.total / hits) * 100 : 0; // Este é o número puro
+
+              const porcentagemString = porcentagemDecimal.toFixed(1); // Este é o valor formatado para exibição (string)
+
+              // ********** CORREÇÃO AQUI **********
+              // Usamos o número puro para a lógica de cor
+              const porcentagemNumero = porcentagemDecimal;
+              // ***********************************
+
               const progressColor =
-                porcentagem >= 50
+                // Agora comparamos um número com outro número
+                porcentagemNumero >= 50
                   ? "bg-green-500"
-                  : porcentagem >= 25
+                  : porcentagemNumero >= 25
                   ? "bg-blue-500"
                   : "bg-yellow-500";
 
@@ -69,12 +79,12 @@ export default function CountriesTable({ countries, hits }: any) {
                         <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
                           <div
                             className={`h-2 rounded-full ${progressColor} transition-all duration-500`}
-                            style={{ width: `${porcentagem}%` }}
+                            style={{ width: `${porcentagemString}%` }}
                           ></div>
                         </div>
                       </div>
                       <span className="text-gray-600 text-xs min-w-[40px]">
-                        {porcentagem}%
+                        {porcentagemString}%
                       </span>
                     </div>
                   </td>
@@ -87,7 +97,7 @@ export default function CountriesTable({ countries, hits }: any) {
 
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="font-semibold text-gray-900">
-                      {porcentagem}%
+                      {porcentagemString}%
                     </span>
                   </td>
                 </tr>

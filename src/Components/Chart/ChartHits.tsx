@@ -9,7 +9,7 @@ import {
 } from "recharts";
 
 export default function ChartHits({ shortUrl, hits }: any) {
-  const data = [{ name: "url", hits: hits }];
+  const data = [{ name: shortUrl, hits: hits }];
 
   return (
     <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col w-full h-full">
