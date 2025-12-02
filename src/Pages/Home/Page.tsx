@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,24 +16,10 @@ const schema = z.object({
 // const apiurl = "http://localhost:3333";
 const apiurl = "https://url-shortener-7jk6.onrender.com";
 
-export default function Home({ setShortUrl }: any) {
-  const [localShortUrl, setLocalShortUrl] = useState<string | null>(null);
-  const [hits, setHits] = useState<number>(0);
-  const [qrcode, setQrcode] = useState<string | null>(null);
+export default function Home() {
   const [loading, setLoading] = useState(false);
   const device = useDeviceInfo();
   const navigate = useNavigate();
-
-  // Atualiza hits em tempo real
-  useEffect(() => {
-    const saved = localStorage.getItem("shortUrl");
-    if (saved) {
-      setLocalShortUrl(saved);
-
-      const id = saved.split("/").pop();
-      loadStats(id!);
-    }
-  }, []);
 
   const {
     register,
@@ -61,9 +47,6 @@ export default function Home({ setShortUrl }: any) {
 
       const result = await response.json();
 
-      setShortUrl(result.shortUrl); // envia para o App (global)
-      setLocalShortUrl(result.shortUrl); // mantém aqui no Home (local)
-      setQrcode(result.qr);
       navigate("/Analytics");
 
       localStorage.setItem("shortUrl", result.shortUrl);
@@ -72,12 +55,6 @@ export default function Home({ setShortUrl }: any) {
     } finally {
       setLoading(false);
     }
-  }
-
-  async function loadStats(id: string) {
-    const res = await fetch(`${apiurl}/stats/${id}`);
-    const data = await res.json();
-    setHits(data.hits);
   }
 
   return (

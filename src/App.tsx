@@ -2,11 +2,8 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home/Page";
 import Analytics from "./Pages/Dashboard/Page";
 import Menu from "./Components/Menu/Menu";
-import { useState } from "react";
 
 export default function App() {
-  const [shortUrl, setShortUrl] = useState<string | null>(null);
-
   const userAgent = navigator.userAgent;
   let device = "Desconhecido";
 
@@ -21,8 +18,8 @@ export default function App() {
     <div>
       <Menu />
       <Routes>
-        <Route path="/" element={<Home setShortUrl={setShortUrl} />} />
-        <Route path="/Analytics" element={<Analytics shortUrl={shortUrl} />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/Analytics" element={<Analytics />} />
       </Routes>
     </div>
   );
