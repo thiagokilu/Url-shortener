@@ -27,8 +27,8 @@ export default function Analytics() {
     loadStats(id!);
   }, [shortUrl]);
 
-  // const API_BASE = "https://url-shortener-7jk6.onrender.com";
-  const API_BASE = "http://localhost:3333";
+  const API_BASE = "https://url-shortener-7jk6.onrender.com";
+  // const API_BASE = "http://localhost:3333";
 
   async function loadStats(id: string) {
     const res = await fetch(`${API_BASE}/stats/${id}`);
