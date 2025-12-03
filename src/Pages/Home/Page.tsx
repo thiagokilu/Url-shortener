@@ -13,8 +13,8 @@ const schema = z.object({
   url: z.string().url("URL inválida"),
 });
 
-// const apiurl = "http://localhost:3333";
-const apiurl = "https://url-shortener-7jk6.onrender.com";
+const apiurl = "http://localhost:3333";
+// const apiurl = "https://url-shortener-7jk6.onrender.com";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);

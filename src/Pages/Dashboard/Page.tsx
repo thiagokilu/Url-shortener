@@ -3,6 +3,7 @@ import AnalyticCard from "../../Components/AnalyticCard/AnalyticCard";
 import CountriesTable from "../../Components/CountriesTable/CountriesTable";
 import MyPieChart from "../../Components/PieChart/PieChart";
 import ChartHits from "../../Components/Chart/ChartHits";
+import { ArrowDown } from "lucide-react";
 
 export default function Analytics() {
   const [hits, setHits] = useState<number>(0);
@@ -26,12 +27,14 @@ export default function Analytics() {
     loadStats(id!);
   }, [shortUrl]);
 
-  const API_BASE = "https://url-shortener-7jk6.onrender.com";
+  // const API_BASE = "https://url-shortener-7jk6.onrender.com";
+  const API_BASE = "http://localhost:3333";
 
   async function loadStats(id: string) {
     const res = await fetch(`${API_BASE}/stats/${id}`);
     const data = await res.json();
     console.log(data);
+    console.log(data.downloadQr);
     setQrCode(data.qr);
     setHits(data.stats.hits);
     console.log(data.devices);
@@ -73,8 +76,15 @@ export default function Analytics() {
               >
                 {shortUrl}
               </a>
-              <div className="mt-4 max-w-64 bg-white rounded-lg p-2">
+              <div className="flex flex-col items-center mt-4 max-w-64 bg-white rounded-lg p-2">
                 <img src={qrcode} alt="qrcode" className="w-full" />
+                <a
+                  href={qrcode}
+                  download="meu-qrcode.png"
+                  className="text-green-600"
+                >
+                  Download <ArrowDown className="inline-block w-4 h-4 ml-1" />
+                </a>
               </div>
             </div>
             <section className="flex flex-row gap-5">
